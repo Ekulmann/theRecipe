@@ -10,11 +10,12 @@ html, body {
     -ms-transform: translateX(50%);
     transform: translateX(50%);
 }
-/* Füge den gewünschten Abstand oberhalb und unterhalb der Inputs hinzu */
+
 .mr-2 {
     margin-top: 7px;
     margin-bottom: 7px;
 }
+
 .btn-ingredients {
     transform: scale(0.65);
 }

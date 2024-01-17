@@ -6,14 +6,13 @@
     <title>theRecipe</title>
     <link href="style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
 <h1>theRecipe</h1>
 <div class="d-grid gap-2 col-6 mx-auto">
     <a href="newRecipe.php" class="btn btn-primary" role="button">Neues Rezept erstellen</a>
-    <a href="recipeBook.php" class="btn btn-primary" role="button">Rezeptbuch</a>
+    <a href="recipeBook.php" class="btn btn-primary" role="button">Rezeptbuch <span class="badge text-bg-secondary">REZEPTANZAHl</span></a>
 </div>
 </body>
 </html>

@@ -6,7 +6,6 @@
     <title>theRecipe</title>
     <link href="style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -18,7 +17,7 @@
         <div id="helpTextForName" class="form-text">Unter diesem Namen wirst du später dein Rezept finden können.</div>
     </div>
     <div class="mb-3"> <!-- Rezept Group -->
-        <label for="selectGroup" class="form-label">Wähle eine Gruppe für dein Rezept</label>
+        <label for="selectGroup" class="form-label">Kategorie</label>
         <select id="selectGroup" class="form-select" aria-describedby="helpTextForGroup">
             <option value="beilage">Beilage</option>
             <option value="dessert">Dessert</option>
@@ -30,7 +29,7 @@
         <div id="helpTextForGroup" class="form-text">Um deine Rezepte später besser zu filtern, musst du eine Gruppe angeben.</div>
     </div>
     <div class="col-auto"> <!-- Personen -->
-        <label class="visually-hidden" for="recipePersonCount">Portionen</label>
+        <label class="form-label" for="recipePersonCount">Portionen</label>
         <select class="form-select" id="recipePersonCount" aria-describedby="helpTextPersonCount">
             <option value="1">1x Person</option>
             <option value="2">2x Personen</option>
@@ -44,16 +43,28 @@
             <option value="10">10x Personen</option>
         </select>
         <div id="helpTextPersonCount" class="form-text">Gebe an, für wie viele Personen deine Zutaten ausreichen.</div>
-        <div class="mb-3"> <!-- Zubereitungszeit -->
-            <label for="getNumberFromRange" class="form-label">Zubereitungsdauer</label>
-            <!-- Range -->
-            <input type="range" name="get" class="form-range" step="5" value="20" min="5" max="120" id="get" onchange="updateTextInput()">
-            <!-- Input -->
-            <input type="text" class="form-control disabled" id="put" aria-describedby="helpTextDuration">
+        <div class="row g-3 align-items-center"> <!-- Zubereitungszeit -->
+            <label for="getNumberFromRange" class="col-form-label">Zubereitungsdauer</label>
+            <div class="col-auto">
+            <input type="range" class="form-range" id="rangeInput" min="5" max="120" step="5" value="20" oninput="updateTextInput(this.value)">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <input type="text" id="textInput" class="form-control" value="20" aria-describedby="minuteHelpInline">
+                </div>
+                <div class="col-auto">
+                    <span id="minuteHelpInline" class="form-text">Minuten</span>
+                </div>
+            </div>
+            <script>
+                function updateTextInput(value) {
+                    document.getElementById('textInput').value = value;
+                }
+            </script>
             <div id="helpTextDuration" class="form-text">Gebe an, wie viel Zubereitungszeit das Gericht hat.</div>
         </div>
     </div>
-    <br><button type="submit" class="btn btn-primary">Zutaten hinzufügen</button>
+        <br><a href="home.php" class="btn btn-warning" role="button"><- Home</a>
+        <button type="submit" class="btn btn-success">Zutaten hinzufügen</button>
 </form>
 </body>
 </html>

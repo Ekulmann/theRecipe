@@ -12,8 +12,8 @@
 <body>
 <h1>theRecipe</h1>
 <div class="d-grid gap-2 col-6 mx-auto">
-    <button class="btn btn-primary" type="button">Neues Rezept erstellen</button>
-    <button class="btn btn-primary" type="button">Rezeptbuch</button>
+    <a href="newRecipe.php" class="btn btn-primary" role="button">Neues Rezept erstellen</a>
+    <a href="recipeBook.php" class="btn btn-primary" role="button">Rezeptbuch</a>
 </div>
 </body>
 </html>

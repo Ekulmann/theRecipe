@@ -44,14 +44,12 @@
             <option value="10">10x Personen</option>
         </select>
         <div id="helpTextPersonCount" class="form-text">Gebe an, für wie viele Personen deine Zutaten ausreichen.</div>
-        <div class="mb-3"> <!-- Zubereitungszeit -->
-            <label for="getNumberFromRange" class="form-label">Zubereitungsdauer</label>
-            <!-- Range -->
-            <input type="range" name="get" class="form-range" step="5" value="20" min="5" max="120" id="get" onchange="updateTextInput()">
-            <!-- Input -->
-            <input type="text" class="form-control disabled" id="put" aria-describedby="helpTextDuration">
-            <div id="helpTextDuration" class="form-text">Gebe an, wie viel Zubereitungszeit das Gericht hat.</div>
-        </div>
+    </div>
+    <div class="mb-3"> <!-- Zubereitungszeit -->
+        <label for="recipeDuration" class="form-label">Zubereitungsdauer</label>
+        <input type="number" class="form-control disabled" id="customRange2" aria-describedby="helpTextDuration">
+        <input type="range" class="form-range" min="5" max="120" id="customRange2">
+        <div id="helpTextDuration" class="form-text">Gebe an, wie viel Zubereitungszeit</div>
     </div>
     <br><button type="submit" class="btn btn-primary">Zutaten hinzufügen</button>
 </form>

@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>theRecipe</title>
+    <?php include ("db.php"); ?>
     <link href="style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -23,47 +24,47 @@
     </div>
     <div class="row">
         <div class="col-md-4">
-            <br><button type="button" onclick="addZutat()" class="btn btn-success btn-block">Zutat hinzufügen</button>
+            <br><button type="button" onclick="addZutat()" class="btn btn-success btn-block">+</button>
         </div>
     </div>
     <script>
         function addZutat() {
-            var zutatenContainer = document.getElementById('zutatenContainer');
+            let zutatenContainer = document.getElementById('zutatenContainer');
 
             // Erstelle ein neues Div-Element für die Zutat
-            var zutatDiv = document.createElement('div');
+            let zutatDiv = document.createElement('div');
             zutatDiv.classList.add('zutatDiv', 'd-flex', 'flex-row'); // Bootstrap Flexbox-Klassen
 
             // Erstelle ein Texteingabefeld für den Zutatennamen mit Bootstrap-Klassen
-            var zutatNameInput = document.createElement('input');
+            let zutatNameInput = document.createElement('input');
             zutatNameInput.type = 'text';
             zutatNameInput.name = 'zutatName[]';
             zutatNameInput.placeholder = 'Zutat';
             zutatNameInput.classList.add('form-control', 'mr-2'); // Bootstrap Klassen
 
             // Erstelle ein Dropdown-Menü für die Einheit mit Bootstrap-Klassen
-            var einheitDropdown = document.createElement('select');
+            let einheitDropdown = document.createElement('select');
             einheitDropdown.name = 'einheit[]';
             einheitDropdown.classList.add('form-control', 'mr-2'); // Bootstrap Klassen
 
-            var einheiten = ['Stück', 'Tasse', 'EL', 'TL', 'Prise', 'g', 'kg', 'ml', 'cl', 'dl', 'l', 'Becher', 'Bund', 'Blatt', 'Zehe', 'Dose', 'Paket', 'Packung'];
+            let einheiten = ['Stück', 'Tasse', 'EL', 'TL', 'Prise', 'g', 'kg', 'ml', 'cl', 'dl', 'l', 'Becher', 'Bund', 'Blatt', 'Zehe', 'Dose', 'Paket', 'Packung'];
 
-            for (var i = 0; i < einheiten.length; i++) {
-                var option = document.createElement('option');
+            for (let i = 0; i < einheiten.length; i++) {
+                let option = document.createElement('option');
                 option.value = einheiten[i];
                 option.text = einheiten[i];
                 einheitDropdown.appendChild(option);
             }
 
             // Erstelle ein Texteingabefeld für die Menge mit Bootstrap-Klassen
-            var mengeInput = document.createElement('input');
+            let mengeInput = document.createElement('input');
             mengeInput.type = 'text';
             mengeInput.name = 'menge[]';
             mengeInput.placeholder = 'Menge';
             mengeInput.classList.add('form-control', 'mr-2'); // Bootstrap Klassen
 
             // Erstelle einen Button zum Entfernen der Zutat mit Bootstrap-Klassen
-            var entfernenButton = document.createElement('button');
+            let entfernenButton = document.createElement('button');
             entfernenButton.type = 'button';
             entfernenButton.innerHTML = 'X';
             entfernenButton.classList.add('btn', 'btn-danger', 'btn-ingredients');
@@ -80,6 +81,42 @@
             // Füge das Div dem Container hinzu
             zutatenContainer.appendChild(zutatDiv);
         }</script>
+    <?php
+try {
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Hier beginnt der Code zur Verarbeitung der Formulardaten
+
+        $rezept_name = $_POST['recipeName'];
+        $kategorie = $_POST['selectGroup'];
+        $portionen = $_POST['recipePersonCount'];
+        $laenge_des_gerichts = $_POST['textInput'];
+
+        // Rezeptdetails einfügen
+        $sql_rezept = "INSERT INTO rezepte (rezept_name, kategorie, portionen, laenge_des_gerichts) 
+                       VALUES (:rezept_name, :kategorie, :portionen, :laenge_des_gerichts)";
+        $stmt_rezept = $DB_PDO->prepare($sql_rezept);
+        $stmt_rezept->bindParam(':rezept_name', $rezept_name);
+        $stmt_rezept->bindParam(':kategorie', $kategorie);
+        $stmt_rezept->bindParam(':portionen', $portionen);
+        $stmt_rezept->bindParam(':laenge_des_gerichts', $laenge_des_gerichts);
+        $stmt_rezept->execute();
+
+        $rezept_id = $DB_PDO->lastInsertId(); // Die zuletzt eingefügte ID des Rezepts abrufen
+
+        // Hier können weitere Schritte für die Zutaten hinzugefügt werden
+
+        echo "Rezept und Zutaten erfolgreich in die Datenbank eingefügt.";
+    }
+
+} catch (PDOException $e) {
+    echo "Fehler: " . $e->getMessage();
+}
+
+    $DB_PDO = null; // Verbindung schließen
+
+?>
+
     <br><a href="home.php" class="btn btn-warning" role="button"><- Home</a>
     <button type="submit" class="btn btn-primary">Zutaten hinzufügen</button>
 </form>

@@ -2,7 +2,7 @@
 $db_host = "localhost"; // Adresse des MySQL Servers
 $db_username = "root"; // MySQL Benutzername
 $db_password = ""; // MySQL Passwort für den genannten Benutzer
-$db_name = "test"; // Datenbank Name
+$db_name = "rezept_db"; // Datenbank Name
 
 // DB - Verbindung aufbauen
 try {

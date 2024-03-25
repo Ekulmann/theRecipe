@@ -75,40 +75,64 @@ include("inc/head.php");
             zutatenContainer.appendChild(zutatDiv);
         }</script>
     <?php
-try {
+    try {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Hier beginnt der Code zur Verarbeitung der Formulardaten
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Hier beginnt der Code zur Verarbeitung der Formulardaten
+            $rezept_name = $_POST['recipeName'];
+            $kategorie = $_POST['selectGroup'];
+            $portionen = $_POST['recipePersonCount'];
+            $laenge_des_gerichts = $_POST['textInput'];
 
-        $rezept_name = $_POST['recipeName'];
-        $kategorie = $_POST['selectGroup'];
-        $portionen = $_POST['recipePersonCount'];
-        $laenge_des_gerichts = $_POST['textInput'];
-
-        // Rezeptdetails einfügen
-        $sql_rezept = "INSERT INTO rezepte (rezept_name, kategorie, portionen, laenge_des_gerichts) 
+            // Rezeptdetails einfügen
+            $sql_rezept = "INSERT INTO rezepte (rezept_name, kategorie, portionen, laenge_des_gerichts) 
                        VALUES (:rezept_name, :kategorie, :portionen, :laenge_des_gerichts)";
-        $stmt_rezept = $DB_PDO->prepare($sql_rezept);
-        $stmt_rezept->bindParam(':rezept_name', $rezept_name);
-        $stmt_rezept->bindParam(':kategorie', $kategorie);
-        $stmt_rezept->bindParam(':portionen', $portionen);
-        $stmt_rezept->bindParam(':laenge_des_gerichts', $laenge_des_gerichts);
-        $stmt_rezept->execute();
+            $stmt_rezept = $DB_PDO->prepare($sql_rezept);
+            $stmt_rezept->bindParam(':rezept_name', $rezept_name);
+            $stmt_rezept->bindParam(':kategorie', $kategorie);
+            $stmt_rezept->bindParam(':portionen', $portionen);
+            $stmt_rezept->bindParam(':laenge_des_gerichts', $laenge_des_gerichts);
+            $stmt_rezept->execute();
 
-        $rezept_id = $DB_PDO->lastInsertId(); // Die zuletzt eingefügte ID des Rezepts abrufen
+            $rezept_id = $DB_PDO->lastInsertId(); // Die zuletzt eingefügte ID des Rezepts abrufen
 
-        // Hier können weitere Schritte für die Zutaten hinzugefügt werden
+            // Zutaten dem Rezept hinzufügen
+            if (isset($_POST['zutatName']) && isset($_POST['einheit']) && isset($_POST['menge'])) {
+                $zutatNameList = $_POST['zutatName'];
+                $einheitList = $_POST['einheit'];
+                $mengeList = $_POST['menge'];
 
-        echo "Rezept und Zutaten erfolgreich in die Datenbank eingefügt.";
+                // Überprüfen, ob alle Listen die gleiche Länge haben
+                if (count($zutatNameList) === count($einheitList) && count($einheitList) === count($mengeList)) {
+                    for ($i = 0; $i < count($zutatNameList); $i++) {
+                        $zutat_name = $zutatNameList[$i];
+                        $einheit = $einheitList[$i];
+                        $menge = $mengeList[$i];
+
+                        // Zutat in die Datenbank einfügen
+                        $sql_zutat = "INSERT INTO zutaten (rezept_id, zutat_name, einheit, menge) 
+                                  VALUES (:rezept_id, :zutat_name, :einheit, :menge)";
+                        $stmt_zutat = $DB_PDO->prepare($sql_zutat);
+                        $stmt_zutat->bindParam(':rezept_id', $rezept_id);
+                        $stmt_zutat->bindParam(':zutat_name', $zutat_name);
+                        $stmt_zutat->bindParam(':einheit', $einheit);
+                        $stmt_zutat->bindParam(':menge', $menge);
+                        $stmt_zutat->execute();
+                    }
+                } else {
+                    echo "Fehler: Die Anzahl der Zutaten, Einheiten und Mengen stimmt nicht überein.";
+                }
+            }
+
+            echo "Rezept und Zutaten erfolgreich in die Datenbank eingefügt.";
+        }
+
+    } catch (PDOException $e) {
+        echo "Fehler: " . $e->getMessage();
     }
 
-} catch (PDOException $e) {
-    echo "Fehler: " . $e->getMessage();
-}
-
     $DB_PDO = null; // Verbindung schließen
-
-?>
+    ?>
 
     <br><a href="index.php" class="btn btn-warning" role="button"><- Home</a>
     <button type="submit" class="btn btn-primary">Zutaten hinzufügen</button>

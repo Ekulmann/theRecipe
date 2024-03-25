@@ -22,5 +22,54 @@ include("inc/head.php");
         </div>
     </div>
 </nav>
+<br>
+<?php
+// Datenbankverbindung herstellen (hier Annahme: localhost, Benutzer: root, Passwort: '', Datenbankname: rezepte_db)
+$db_host = "localhost"; // Adresse des MySQL Servers
+$db_username = "root"; // MySQL Benutzername
+$db_password = ""; // MySQL Passwort für den genannten Benutzer
+$db_name = "rezept_db"; // Datenbank Name
+
+// Verbindung herstellen
+$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
+
+// Verbindung überprüfen
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// SQL-Abfrage vorbereiten
+$sql = "SELECT rezept_name, kategorie, portionen, laenge_des_gerichts, created_at FROM rezepte";
+$result = $conn->query($sql);
+
+if ($result) {
+    if ($result->num_rows > 0) {
+        // Ausgabe der Daten in Cards
+        while($row = $result->fetch_assoc()) {
+            echo '<div class="row">';
+            echo '<div class="col-sm-6 mb-3 mb-sm-0">';
+            echo '<div class="card">';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">' . $row["rezept_name"] . '</h5>';
+            echo '<p class="card-text">Kategorie: ' . $row["kategorie"] . '<br>Portionen: ' . $row["portionen"] . '<br>Länge des Gerichts: ' . $row["laenge_des_gerichts"] . '<br>Erstellt am: ' . $row["created_at"] . '</p>';
+            echo '<a href="#" class="btn btn-primary">Zum Rezept</a>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<br>';
+
+        }
+    } else {
+        echo "Keine Ergebnisse gefunden.";
+    }
+} else {
+    echo "Fehler bei der Abfrage: " . $conn->error;
+}
+
+// Verbindung schließen
+$conn->close();
+?>
+
 </body>
 </html>
